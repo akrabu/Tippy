@@ -35,19 +35,21 @@ Open **Settings → Install Tippy** for the installation guide. In browser mode,
 
 Offline use is available once the app has loaded and cached its files. All calculations run in the browser; no backend, analytics, or external runtime assets are included.
 
+Only successful HTML responses for the app's root or index page refresh its saved offline page. Network failures, temporary server errors, and unexpected response types use that saved page instead. Opening an icon or another asset cannot replace the offline app.
+
 ## iPhone display
 
 The installed page, calculator, and Settings sheet use `min(100vh, calc(100dvh + env(safe-area-inset-top)))`. This includes the status area only when iOS reports its top safe inset, capped at the classic viewport height, so the page can fit both installed launch geometries. Browser tabs and Android retain dynamic viewport sizing. The existing up-to-32-pixel header clearance remains in place to avoid the native scroll-edge blur, tapering on very short viewports.
 
 The total and people wheel share the lower readout on opposite sides, leaving more height for the keypad. The footer reserves a 16-pixel gap below the keys (8 pixels on very short screens). The full-height background and roller clearances remain in place.
 
-The iPhone 13 mini on iOS 27.0.1 has reported both 0/34 and 50/34-pixel safe-area insets with a 375 × 762 dynamic viewport. Revision `v0.1.2-00005` fits a 762-pixel page in the zero-top-inset case and includes the overlaid 50-pixel status area in the other case. Both browser fixtures produce 79-pixel keys and a fully visible footer. Tapping the version and opening or closing dialogs leave the page at scroll position zero. Confirmation in the native Home Screen app remains necessary.
+The iPhone 13 mini on iOS 27.0.1 has reported both 0/34 and 50/34-pixel safe-area insets with a 375 × 762 dynamic viewport. Revision `v0.1.2-00005` fits a 762-pixel page in the zero-top-inset case and includes the overlaid 50-pixel status area in the other case. Both browser fixtures produce 79-pixel keys and a fully visible footer. Tapping the version and opening or closing dialogs leave the page at scroll position zero. The larger buttons, clear header, and visible footer were confirmed in the Home Screen app on that revision.
 
 Tap the version number to open **Display check**, then **Copy details** to share layout measurements when troubleshooting. It includes all four viewport-unit heights, key size, and footer clearance. Details stay on the device unless you copy and share them; no diagnostics are transmitted automatically.
 
 ## Credits and testing revisions
 
-The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00005)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
+The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00006)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
 
 Before each subsequent publication, run:
 
@@ -77,7 +79,7 @@ With Node.js 18 or newer:
 node --test tests/*.test.mjs
 ```
 
-The tests cover cent precision, fractional rates, upward rounding, splitting, zero amounts, input limits, automatic-clear timing, platform detection, and accepted, dismissed, or unavailable native installation prompts.
+The tests cover cent precision, fractional rates, upward rounding, splitting, zero amounts, input limits, automatic-clear timing, platform detection, accepted/dismissed/unavailable native installation prompts, offline launches and updates, server-error fallback, subdirectory hosting, and protection of the cached app page when opening assets.
 
 ## Files and hosting
 
