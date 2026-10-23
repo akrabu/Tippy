@@ -177,6 +177,10 @@ button.setting-row:active { background:#88888817; }
 .display-check pre { font:12px/1.4 ui-monospace,monospace; white-space:pre-wrap; overflow-wrap:anywhere; margin:0 0 20px; }
 @media(min-width:650px) { .calculator { max-height:1000px; } .settings-sheet { max-height:1000px; } }
 @media(max-height:740px) { :root { --app-inset-top:max(env(safe-area-inset-top),8px); --app-inset-bottom:max(env(safe-area-inset-bottom),20px); } .calculator { --header-height:44px; --readout-height:288px; --key-gap:6px; } .readout { grid-template-rows:minmax(52px,1fr) 88px 64px 84px; } .keypad { height:calc(86.6cqw + 18px); min-height:194px; } .key { font-size:7cqw; } .amount { font-size:11.5cqw; } .tip-amount { font-size:14cqw; } .wheel { height:72px; } .wheel::before { top:20px; } .wheel-scroll { padding-block:21px; } .rounding-indicator,.each-indicator { font-size:9px; } }
-/* An opaque iOS status bar already sits above the viewport. Keep only any real inset. */
-:root[data-ios-standalone="true"] { --app-inset-top:env(safe-area-inset-top,0px); --sheet-inset-top:env(safe-area-inset-top,0px); }
+/* Keep both headers below iOS's native scroll-edge blur; retain the full background. */
+:root[data-ios-standalone="true"] {
+  --ios-header-clearance:clamp(0px,calc(100dvh - 620px),40px);
+  --app-inset-top:calc(env(safe-area-inset-top,0px) + var(--ios-header-clearance));
+  --sheet-inset-top:calc(env(safe-area-inset-top,0px) + var(--ios-header-clearance));
+}
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; } }

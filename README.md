@@ -37,13 +37,15 @@ Offline use is available once the app has loaded and cached its files. All calcu
 
 ## iPhone display
 
-The calculator and Settings use dynamic viewport height with safe-area insets applied once. The bottom-strip fix was confirmed on an iPhone 13 mini running iOS 27.0.1. The system header blur remains on that device, including after a fresh Home Screen installation and an opaque status-bar request.
+The calculator and Settings use dynamic viewport height with safe-area insets applied once. In the installed iOS app, up to 40 pixels of top clearance moves both headers below the native scroll-edge blur. The clearance tapers on very short viewports to keep the keypad usable. The full-height background, bottom credit, and reserved roller gaps remain in place. Browser tabs and Android retain their existing spacing.
+
+The bottom-strip fix was confirmed on an iPhone 13 mini running iOS 27.0.1. An opaque status-bar request alone did not remove the blur, including after a fresh Home Screen installation. The added clearance has been checked against the phone's reported 375 × 762 viewport with a 34-pixel bottom safe area; the native blur still needs confirmation on that device.
 
 Tap the version number to open **Display check**, then **Copy details** to share layout measurements when troubleshooting. The details stay on the device unless you choose to copy and share them; no diagnostics are transmitted automatically.
 
 ## Credits and testing revisions
 
-The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00001)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
+The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00002)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
 
 Before each subsequent publication, run:
 
