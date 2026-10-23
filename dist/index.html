@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" data-theme="classic" data-appearance="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#222337">
+  <meta name="description" content="Your pocket tip calculator. Split the bill, choose a tip, and round things off. Works offline.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tippy">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="color-scheme" content="dark light">
+  <title>Tippy</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script>
+    try {
+      const saved = JSON.parse(localStorage.getItem('tipsy.preferences') || '{}');
+      const appearance = saved.appearance || 'automatic';
+      document.documentElement.dataset.appearance = appearance === 'automatic' ? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : appearance;
+      document.documentElement.dataset.theme = saved.theme || 'classic';
+    } catch {}
+  </script>
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <svg class="svg-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="person-icon" viewBox="0 0 32 32"><circle cx="16" cy="9" r="5"/><path d="M5 28c0-6 4.7-9 11-9s11 3 11 9Z"/></symbol>
+      <symbol id="clear-icon" viewBox="0 0 40 40"><rect x="6" y="4" width="28" height="32" rx="3"/><path d="m14 13 12 14m0-14L14 27"/></symbol>
+      <symbol id="backspace-icon" viewBox="0 0 44 40"><path d="M17 5h21a3 3 0 0 1 3 3v24a3 3 0 0 1-3 3H17L3 20Z"/><path d="m22 13 12 14m0-14L22 27"/></symbol>
+      <symbol id="close-icon" viewBox="0 0 32 32"><path d="m6 6 20 20M26 6 6 26"/></symbol>
+      <symbol id="check-icon" viewBox="0 0 28 32"><path d="m5 17 6 7L24 5"/></symbol>
+      <symbol id="settings-icon" viewBox="0 0 48 48"><g stroke-width="1.6"><circle cx="24" cy="24" r="17"/><circle cx="24" cy="24" r="13"/><path d="M24 3v8m0 26v8M3 24h8m26 0h8M9.2 9.2l5.7 5.7m18.2 18.2 5.7 5.7M9.2 38.8l5.7-5.7m18.2-18.2 5.7-5.7M16 4.6l3 7.4m10 24 3 7.4M4.6 32l7.4-3m24-10 7.4-3M4.6 16l7.4 3m24 10 7.4 3M16 43.4l3-7.4m10-24 3-7.4M19.8 3.4l1.5 7.8m5.4 25.6 1.5 7.8M3.4 28.2l7.8-1.5m25.6-5.4 7.8-1.5M6.5 12.3l6.6 4.3m21.8 14.8 6.6 4.3M12.3 41.5l4.3-6.6m14.8-21.8 4.3-6.6M12.3 6.5l4.3 6.6m14.8 21.8 4.3 6.6M6.5 35.7l6.6-4.3m21.8-14.8 6.6-4.3M3.4 19.8l7.8 1.5m25.6 5.4 7.8 1.5M19.8 44.6l1.5-7.8m5.4-25.6 1.5-7.8"/><path d="m18 12 6 12 13 1M24 24l-8 11"/></g></symbol>
+      <symbol id="share-icon" viewBox="0 0 32 32"><path d="M11 12H6v17h20V12h-5M16 21V2m-6 6 6-6 6 6"/></symbol>
+    </defs>
+  </svg>
+
+  <main class="calculator" aria-label="Tippy tip calculator">
+    <header class="app-header">
+      <h1>Tippy</h1>
+      <button id="settings-button" class="glass-button" aria-label="Settings" aria-haspopup="dialog"><svg><use href="#settings-icon"/></svg></button>
+    </header>
+
+    <section class="readout" aria-label="Bill and tip">
+      <div class="bill-line"><span class="sr-only">Bill </span><output id="bill" class="amount">$0.00</output></div>
+      <div class="tip-line">
+        <div id="tip-wheel" class="wheel tip-wheel" role="group" aria-label="Tip percentage">
+          <div id="tip-options" class="wheel-scroll" role="listbox" tabindex="0" aria-label="Tip percentage"></div>
+        </div>
+        <button id="tip-button" class="amount-button" aria-label="Tip, tap to round tip"><output id="tip" class="amount tip-amount">$0.00</output><span id="tip-indicator" class="rounding-indicator" hidden>ROUNDED</span></button>
+      </div>
+      <div class="total-line"><button id="total-button" class="amount-button" aria-label="Total, tap to round total"><output id="total" class="amount">$0.00</output><span id="total-indicator" class="rounding-indicator">ROUNDED</span><span id="each-indicator" class="each-indicator" hidden>EACH</span></button></div>
+      <div class="party-line"><div id="people-wheel" class="wheel people-wheel" role="group" aria-label="Split the bill"><div id="people-options" class="wheel-scroll" role="listbox" tabindex="0" aria-label="Number of people"></div></div></div>
+    </section>
+
+    <section id="keypad" class="keypad" aria-label="Enter bill amount"></section>
+    <p id="announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+  </main>
+
+  <dialog id="settings" class="settings-sheet" aria-labelledby="settings-title">
+    <header class="sheet-header"><h2 id="settings-title">Settings</h2><button id="close-settings" class="glass-button close-button" aria-label="Close settings"><svg><use href="#close-icon"/></svg></button></header>
+    <div class="settings-content">
+      <section class="settings-section"><h3>Rounding</h3><div class="setting-group" id="rounding-options" role="group" aria-label="Rounding"></div></section>
+      <section class="settings-section rounding-controls"><div class="setting-group">
+        <label class="setting-row switch-row"><span>Show Rounding Indicator</span><input id="show-rounding" type="checkbox" role="switch"><span class="switch" aria-hidden="true"></span></label>
+        <label class="setting-row switch-row"><span>Tap to Set Rounding</span><input id="tap-rounding" type="checkbox" role="switch"><span class="switch" aria-hidden="true"></span></label>
+      </div><p class="setting-description">Tap the Tip or Total to quickly set rounding</p></section>
+      <section class="settings-section theme-section"><h3>Theme</h3><div class="setting-group" id="theme-options" role="group" aria-label="Theme"></div></section>
+      <section class="settings-section"><div class="setting-group"><label class="setting-row switch-row"><span>Clear Automatically</span><input id="auto-clear" type="checkbox" role="switch"><span class="switch" aria-hidden="true"></span></label></div><p class="setting-description">Clear after 15 minutes</p></section>
+      <section class="settings-section keyboard-section"><h3>Keyboard Layout</h3><div class="setting-group" id="layout-options" role="group" aria-label="Keyboard layout"></div></section>
+      <section class="settings-section appearance-section"><h3>Appearance</h3><div class="setting-group" id="appearance-options" role="group" aria-label="Appearance"></div></section>
+      <section class="settings-section install-section"><div class="setting-group"><button id="install-button" class="setting-row install-row"><span>Add to Home Screen</span><svg class="share-icon"><use href="#share-icon"/></svg></button></div><p id="install-caption" class="setting-description">Keep Tippy in your pocket. Works offline.</p></section>
+      <p class="settings-footer">Tippy · A little tip goes a long way.</p>
+    </div>
+  </dialog>
+
+  <dialog id="install-dialog" class="small-dialog" aria-labelledby="install-title"><h2 id="install-title">Tippy, always with you.</h2><p id="install-instructions"></p><button id="close-install" class="primary-button">Got it</button></dialog>
+  <dialog id="custom-tip-dialog" class="small-dialog" aria-labelledby="custom-tip-title"><form id="custom-tip-form"><h2 id="custom-tip-title">Tip percentage</h2><label class="custom-tip-field"><input id="custom-tip-input" type="number" min="0" max="100" step="0.5" inputmode="decimal" required aria-label="Custom tip percentage"><span>%</span></label><div class="dialog-actions"><button type="button" id="cancel-custom-tip" class="secondary-button">Cancel</button><button type="submit" class="primary-button">Set tip</button></div></form></dialog>
+</body>
+</html>

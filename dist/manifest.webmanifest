@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "Tippy",
+  "short_name": "Tippy",
+  "description": "Your favorite little tip calculator. Split, tip, round. Even offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#222337",
+  "theme_color": "#222337",
+  "orientation": "portrait-primary",
+  "categories": ["utilities", "finance"],
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
