@@ -35,6 +35,12 @@ Open **Settings → Install Tippy** for the installation guide. In browser mode,
 
 Offline use is available once the app has loaded and cached its files. All calculations run in the browser; no backend, analytics, or external runtime assets are included.
 
+## iPhone display
+
+Tippy requests an opaque iOS status bar: `black` in dark appearance and `default` in light appearance. Web content starts below the system status area instead of requesting a translucent overlay over the header. The calculator and Settings use dynamic viewport height, with safe-area insets applied once. The page background matches the bottom of the calculator.
+
+The sizing and appearance changes have been checked at the iPhone 13 mini's dimensions and with simulated safe-area insets. iOS 27's native status-bar blur still requires confirmation on a physical device; a desktop browser cannot reproduce that overlay.
+
 ## Controls and calculations
 
 - Enter the bill in cents: `1 2 3 4` enters **$12.34**. Clear resets the bill; backspace removes one digit.

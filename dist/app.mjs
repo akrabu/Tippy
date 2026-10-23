@@ -57,6 +57,7 @@ function applyAppearance() {
   root.dataset.appearance = resolved;
   root.dataset.theme = preferences.theme;
   document.querySelector('meta[name="theme-color"]').content = getComputedStyle(root).getPropertyValue('--background-top').trim();
+  document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content = resolved === 'light' ? 'default' : 'black';
   document.querySelectorAll('.theme-row').forEach((row) => {
     const colors = themes.find((theme)=>theme.id === row.dataset.value)[resolved];
     row.querySelectorAll('.swatch i').forEach((stripe,i) => stripe.style.background = colors[i]);

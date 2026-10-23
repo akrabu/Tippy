@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#222337">
   <meta name="description" content="Your pocket tip calculator. Split the bill, choose a tip, and round things off. Works offline.">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Tippy">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="color-scheme" content="dark light">
@@ -14,16 +14,20 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="./styles.css?v=4.1">
+  <link rel="stylesheet" href="./styles.css?v=4.2">
   <script>
+    const root = document.documentElement;
+    const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    root.dataset.iosStandalone = String(ios && (navigator.standalone === true || matchMedia('(display-mode: standalone)').matches));
     try {
       const saved = JSON.parse(localStorage.getItem('tipsy.preferences') || '{}');
       const appearance = saved.appearance || 'automatic';
-      document.documentElement.dataset.appearance = appearance === 'automatic' ? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : appearance;
-      document.documentElement.dataset.theme = saved.theme || 'classic';
+      root.dataset.appearance = appearance === 'automatic' ? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : appearance;
+      root.dataset.theme = saved.theme || 'classic';
     } catch {}
+    document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content = root.dataset.appearance === 'light' ? 'default' : 'black';
   </script>
-  <script type="module" src="./app.mjs?v=4.1"></script>
+  <script type="module" src="./app.mjs?v=4.2"></script>
 </head>
 <body>
   <svg class="svg-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
