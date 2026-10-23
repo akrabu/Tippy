@@ -198,7 +198,11 @@ function displayDetails() {
   document.body.append(probe);
   const computed = getComputedStyle(probe);
   const safe = `${computed.paddingTop} / ${computed.paddingBottom}`;
-  const dynamicHeight = computed.height;
+  const heights = {};
+  for (const unit of ['vh','svh','lvh','dvh']) {
+    probe.style.height = `100${unit}`;
+    heights[unit] = getComputedStyle(probe).height;
+  }
   probe.remove();
   const rect = (element) => {
     const box = element.getBoundingClientRect();
@@ -214,12 +218,14 @@ function displayDetails() {
     `Document: ${root.clientWidth} × ${root.clientHeight}`,
     `Visual: ${viewport ? `${Math.round(viewport.width)} × ${Math.round(viewport.height)}, top ${viewport.offsetTop}, scale ${viewport.scale}` : 'unavailable'}`,
     `Safe top / bottom: ${safe}`,
-    `100dvh: ${dynamicHeight}`,
+    `100vh / svh / lvh / dvh: ${['vh','svh','lvh','dvh'].map(unit=>heights[unit]).join(' / ')}`,
     `Scroll Y: ${scrollY}`,
     `Body: ${rect(document.body)}`,
     `App: ${rect($('.calculator'))}`,
     `Header: ${rect($('.app-header'))}`,
     `Keys: ${rect($('#keypad'))}`,
+    `Key size: ${Math.round($('.key[data-action="0"]').getBoundingClientRect().height * 10) / 10}px`,
+    `Footer gap: ${Math.round($('.app-footer').getBoundingClientRect().top - $('#keypad').getBoundingClientRect().bottom)}px`,
     `Padding: ${appStyle.paddingTop} / ${appStyle.paddingBottom}`,
     `Appearance: ${root.dataset.appearance}`,
     `Status style: ${$('meta[name="apple-mobile-web-app-status-bar-style"]').content}`,
