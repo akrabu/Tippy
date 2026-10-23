@@ -3,6 +3,7 @@ import { getInstallPlatform, requestNativeInstall } from './install.mjs';
 
 const $ = (selector) => document.querySelector(selector);
 const root = document.documentElement;
+const appVersion = $('meta[name="application-version"]').content;
 const themes = [
   { id:'classic', name:'Classic Tippy', dark:['linear-gradient(#222337,#080b0e)','#ffffff','#77ffdf'], light:['#ffffff','#050505','#1d7564'] },
   { id:'forest', name:'Forest', dark:['#30434b','#d0d7cb','#8aaf91'], light:['#ced6ca','#527b70','#30434b'] },
@@ -191,6 +192,56 @@ $('#custom-tip-form').addEventListener('submit',(event)=>{
   selectWheel('rate',value);$('#custom-tip-dialog').close();
 });
 $('#cancel-custom-tip').addEventListener('click',()=>$('#custom-tip-dialog').close());
+function displayDetails() {
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;width:0;height:100dvh;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)';
+  document.body.append(probe);
+  const computed = getComputedStyle(probe);
+  const safe = `${computed.paddingTop} / ${computed.paddingBottom}`;
+  const dynamicHeight = computed.height;
+  probe.remove();
+  const rect = (element) => {
+    const box = element.getBoundingClientRect();
+    return `${Math.round(box.top)}..${Math.round(box.bottom)} (${Math.round(box.height)}h)`;
+  };
+  const viewport = window.visualViewport;
+  const appStyle = getComputedStyle($('.calculator'));
+  return [
+    `Tippy v${appVersion}`,
+    `Installed: ${navigator.standalone === true || standaloneQuery.matches}`,
+    `Screen: ${screen.width} × ${screen.height}`,
+    `Window: ${innerWidth} × ${innerHeight}`,
+    `Document: ${root.clientWidth} × ${root.clientHeight}`,
+    `Visual: ${viewport ? `${Math.round(viewport.width)} × ${Math.round(viewport.height)}, top ${viewport.offsetTop}, scale ${viewport.scale}` : 'unavailable'}`,
+    `Safe top / bottom: ${safe}`,
+    `100dvh: ${dynamicHeight}`,
+    `Scroll Y: ${scrollY}`,
+    `Body: ${rect(document.body)}`,
+    `App: ${rect($('.calculator'))}`,
+    `Header: ${rect($('.app-header'))}`,
+    `Keys: ${rect($('#keypad'))}`,
+    `Padding: ${appStyle.paddingTop} / ${appStyle.paddingBottom}`,
+    `Appearance: ${root.dataset.appearance}`,
+    `Status style: ${$('meta[name="apple-mobile-web-app-status-bar-style"]').content}`,
+  ].join('\n');
+}
+document.querySelectorAll('[data-display-check]').forEach(button=>button.addEventListener('click',()=>{
+  $('#display-details').textContent = displayDetails();
+  $('#copy-display-details').textContent = 'Copy details';
+  $('#display-check').showModal();
+  $('#display-check-title').focus({preventScroll:true});
+}));
+$('#close-display-check').addEventListener('click',()=>$('#display-check').close());
+$('#copy-display-details').addEventListener('click',async()=>{
+  try {
+    await navigator.clipboard.writeText($('#display-details').textContent);
+    $('#copy-display-details').textContent = 'Copied';
+  } catch {
+    const range = document.createRange();range.selectNodeContents($('#display-details'));
+    const selection = window.getSelection();selection.removeAllRanges();selection.addRange(range);
+    $('#copy-display-details').textContent = 'Select and copy';
+  }
+});
 function updateInstallHelp() {
   const installed = standaloneQuery.matches || navigator.standalone === true || installConfirmed;
   const section = $('#install-section');

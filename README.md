@@ -37,9 +37,21 @@ Offline use is available once the app has loaded and cached its files. All calcu
 
 ## iPhone display
 
-Tippy requests an opaque iOS status bar: `black` in dark appearance and `default` in light appearance. Web content starts below the system status area instead of requesting a translucent overlay over the header. The calculator and Settings use dynamic viewport height, with safe-area insets applied once. The page background matches the bottom of the calculator.
+The calculator and Settings use dynamic viewport height with safe-area insets applied once. The bottom-strip fix was confirmed on an iPhone 13 mini running iOS 27.0.1. The system header blur remains on that device, including after a fresh Home Screen installation and an opaque status-bar request.
 
-The sizing and appearance changes have been checked at the iPhone 13 mini's dimensions and with simulated safe-area insets. iOS 27's native status-bar blur still requires confirmation on a physical device; a desktop browser cannot reproduce that overlay.
+Tap the version number to open **Display check**, then **Copy details** to share layout measurements when troubleshooting. The details stay on the device unless you choose to copy and share them; no diagnostics are transmitted automatically.
+
+## Credits and testing revisions
+
+The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00001)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
+
+Before each subsequent publication, run:
+
+```sh
+node scripts/bump-version.mjs
+```
+
+The helper increments the five-digit testing revision and updates the displayed version, metadata, stylesheet and module URLs, and service-worker cache together. For a feature release, change the three-part base version consistently in `dist/index.html` and `dist/sw.js` before running the helper.
 
 ## Controls and calculations
 
@@ -69,4 +81,4 @@ The tests cover cent precision, fractional rates, upward rounding, splitting, ze
 - `tests/` — calculation, input, and installation-flow tests.
 - `scripts/make-icons.py` — dependency-free PWA icon generator; run with Python 3 to regenerate the PNG icons.
 
-Publish the contents of **`dist/`** to an HTTPS static host. Paths are relative so the app can run at a domain root or under a subdirectory. If you change cached app files, update the cache version in `dist/sw.js` and keep the release query URLs in `dist/index.html` and the service worker asset list in sync when deploying.
+Publish the contents of **`dist/`** to an HTTPS static host. Paths are relative so the app can run at a domain root or under a subdirectory. Run the testing-revision helper before publishing changes to cached app files so the interface, release URLs, and offline cache stay in sync.

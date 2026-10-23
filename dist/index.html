@@ -10,11 +10,12 @@
   <meta name="apple-mobile-web-app-title" content="Tippy">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="color-scheme" content="dark light">
+  <meta name="application-version" content="0.1.2-00001">
   <title>Tippy</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="./styles.css?v=4.2">
+  <link rel="stylesheet" href="./styles.css?v=0.1.2-00001">
   <script>
     const root = document.documentElement;
     const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -27,7 +28,7 @@
     } catch {}
     document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content = root.dataset.appearance === 'light' ? 'default' : 'black';
   </script>
-  <script type="module" src="./app.mjs?v=4.2"></script>
+  <script type="module" src="./app.mjs?v=0.1.2-00001"></script>
 </head>
 <body>
   <svg class="svg-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -61,6 +62,7 @@
     </section>
 
     <section id="keypad" class="keypad" aria-label="Enter bill amount"></section>
+    <footer class="app-footer">© 2026 <a href="https://www.markstevensmithjr.com" target="_blank" rel="noopener">Mark Steven Smith, Jr.</a> (<button type="button" class="app-version" data-display-check aria-label="Version 0.1.2-00001, display information">v0.1.2-00001</button>)</footer>
     <p id="announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
   </main>
 
@@ -77,7 +79,7 @@
       <section class="settings-section keyboard-section"><h3>Keyboard Layout</h3><div class="setting-group" id="layout-options" role="group" aria-label="Keyboard layout"></div></section>
       <section class="settings-section appearance-section"><h3>Appearance</h3><div class="setting-group" id="appearance-options" role="group" aria-label="Appearance"></div></section>
       <section id="install-section" class="settings-section install-section"><div class="setting-group"><button id="install-button" class="setting-row install-row" aria-haspopup="dialog"><span id="install-entry-label">Install Tippy</span><svg class="share-icon"><use href="#share-icon"/></svg></button></div><p id="install-caption" class="setting-description">Add Tippy to your Home Screen for quick access.</p></section>
-      <p class="settings-footer">Tippy · A little tip goes a long way.</p>
+      <p class="settings-footer app-credit">© 2026 <a href="https://www.markstevensmithjr.com" target="_blank" rel="noopener">Mark Steven Smith, Jr.</a> (<button type="button" class="app-version" data-display-check aria-label="Version 0.1.2-00001, display information">v0.1.2-00001</button>)</p>
     </div>
   </dialog>
 
@@ -102,5 +104,6 @@
     <div class="install-actions"><button id="native-install" class="primary-button" hidden>Install app</button><button id="close-install" class="primary-button">Got it</button></div>
   </dialog>
   <dialog id="custom-tip-dialog" class="small-dialog" aria-labelledby="custom-tip-title"><form id="custom-tip-form"><h2 id="custom-tip-title">Tip percentage</h2><label class="custom-tip-field"><input id="custom-tip-input" type="number" min="0" max="100" step="0.5" inputmode="decimal" required aria-label="Custom tip percentage"><span>%</span></label><div class="dialog-actions"><button type="button" id="cancel-custom-tip" class="secondary-button">Cancel</button><button type="submit" class="primary-button">Set tip</button></div></form></dialog>
+  <dialog id="display-check" class="small-dialog display-check" aria-labelledby="display-check-title"><h2 id="display-check-title" tabindex="-1">Display check</h2><p>These details stay on your device unless you copy and share them.</p><pre id="display-details"></pre><div class="dialog-actions"><button type="button" id="copy-display-details" class="secondary-button">Copy details</button><button type="button" id="close-display-check" class="primary-button">Done</button></div></dialog>
 </body>
 </html>
