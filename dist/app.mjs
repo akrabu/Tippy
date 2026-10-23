@@ -1,4 +1,5 @@
 import { DEFAULT_PREFERENCES, calculate, enterDigit, hasExpired } from './calc.mjs';
+import { getInstallPlatform, requestNativeInstall } from './install.mjs';
 
 const $ = (selector) => document.querySelector(selector);
 const root = document.documentElement;
@@ -28,8 +29,9 @@ if (Number.isInteger(saved.people) && saved.people >= 1 && saved.people <= 30) p
 const previous = readStorage('tipsy.bill');
 let billCents = previous && Number.isSafeInteger(previous.cents) && previous.cents >= 0 && previous.cents <= 999999999 && (!preferences.autoClear || !hasExpired(previous.lastActive)) ? previous.cents : 0;
 let lastActive = previous?.lastActive || Date.now();
-let announceTimer, expiryTimer, installPrompt;
+let announceTimer, expiryTimer, installPrompt, installConfirmed = false;
 const colorQuery = matchMedia('(prefers-color-scheme: light)');
+const standaloneQuery = matchMedia('(display-mode: standalone)');
 const money = new Intl.NumberFormat('en-US', { style:'currency', currency:'USD' });
 const rates = [...new Set([0,5,10,12,15,18,20,22,25,30,35,40,50,75,100,preferences.rate])].sort((a,b)=>a-b);
 const settings = $('#settings');
@@ -169,7 +171,7 @@ function openCustomTip() { $('#custom-tip-input').value=preferences.rate;$('#cus
 for (const [field,entries] of Object.entries(choices)) entries.forEach(([value,label])=>$('#'+field+'-options').append(choiceRow(value,label,field)));
 themes.forEach((theme)=>$('#theme-options').append(choiceRow(theme.id,theme.name,'theme',theme)));
 for (const [id,field] of [['show-rounding','showRounding'],['tap-rounding','tapRounding'],['auto-clear','autoClear']]) $('#'+id).addEventListener('change',(event)=>setPreference(field,event.target.checked));
-$('#settings-button').addEventListener('click',()=>{renderSettings();settings.showModal();$('.settings-content').scrollTop=0;});
+$('#settings-button').addEventListener('click',()=>{renderSettings();updateInstallHelp();settings.showModal();$('.settings-content').scrollTop=0;$('#settings-title').focus({preventScroll:true});});
 $('#close-settings').addEventListener('click',()=>settings.close());
 settings.addEventListener('click',(event)=>{if(event.target === settings){const rect=settings.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)settings.close();}});
 for (const mode of ['tip','total']) $('#'+mode+'-button').addEventListener('click',()=>{if(preferences.tapRounding)setPreference('rounding',preferences.rounding === mode ? 'none' : mode);});
@@ -188,13 +190,42 @@ $('#custom-tip-form').addEventListener('submit',(event)=>{
   selectWheel('rate',value);$('#custom-tip-dialog').close();
 });
 $('#cancel-custom-tip').addEventListener('click',()=>$('#custom-tip-dialog').close());
-window.addEventListener('beforeinstallprompt',(event)=>{event.preventDefault();installPrompt=event;$('#install-button span').textContent='Install Tippy';});
-window.addEventListener('appinstalled',()=>{installPrompt=null;$('#install-caption').textContent='Tippy is on your Home Screen.';});
-$('#install-button').addEventListener('click',async()=>{
-  if(installPrompt){await installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;return;}
-  const installed=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-  $('#install-instructions').textContent=installed?'You’re already using the installed app. Tippy is ready whenever you need it.':/iPhone|iPad|iPod/.test(navigator.userAgent)?'Open Tippy in Safari. Tap the Share button, then Add to Home Screen.\n\nAfter your first visit, your calculator and preferences are available offline.':'Open your browser’s menu and choose Install app or Add to Home Screen.\n\nAfter your first visit, your calculator and preferences are available offline.';
-  $('#install-dialog').showModal();
+function updateInstallHelp() {
+  const installed = standaloneQuery.matches || navigator.standalone === true || installConfirmed;
+  const section = $('#install-section');
+  if (installed) $('.settings-footer').before(section);
+  else $('.settings-content').prepend(section);
+  $('#install-entry-label').textContent = installed ? 'Installation help' : 'Install Tippy';
+  $('#install-caption').textContent = installed ? 'How to add Tippy to a Home Screen.' : 'Add Tippy to your Home Screen for quick access.';
+  $('#already-installed').hidden = !installed;
+  const canInstall = !installed && !!installPrompt;
+  $('#native-install').hidden = !canInstall;
+  $('#close-install').classList.toggle('primary-button', !canInstall);
+  $('#close-install').classList.toggle('secondary-button', canInstall);
+}
+const installPlatform = getInstallPlatform(navigator);
+const preferredGuide = $(`[data-install-platform="${installPlatform}"]`);
+if (preferredGuide) $('.install-platforms').prepend(preferredGuide);
+window.addEventListener('beforeinstallprompt',(event)=>{event.preventDefault();installPrompt=event;updateInstallHelp();});
+window.addEventListener('appinstalled',()=>{
+  installConfirmed = true; installPrompt = null; updateInstallHelp();
+  $('#install-status').hidden = false;
+  $('#install-status').textContent = 'Tippy has been added to your Home Screen.';
+});
+standaloneQuery.addEventListener('change',updateInstallHelp);
+$('#install-button').addEventListener('click',()=>{
+  updateInstallHelp(); $('#install-status').hidden = true;
+  $('#install-dialog').showModal(); $('#install-title').focus({preventScroll:true});
+});
+$('#native-install').addEventListener('click',async()=>{
+  const prompt = installPrompt;
+  installPrompt = null;
+  $('#native-install').disabled = true;
+  const outcome = await requestNativeInstall(prompt);
+  updateInstallHelp(); $('#native-install').disabled = false;
+  $('#install-status').hidden = false;
+  $('#install-status').textContent = installConfirmed ? 'Tippy has been added to your Home Screen.' : outcome === 'accepted' ? 'Installation requested. Follow your browser’s confirmation.' : outcome === 'dismissed' ? 'You can install later using the steps above.' : 'Use the steps above to install Tippy from your browser.';
+  $('#install-title').focus({preventScroll:true});
 });
 $('#close-install').addEventListener('click',()=>$('#install-dialog').close());
 colorQuery.addEventListener('change',()=>{if(preferences.appearance==='automatic')applyAppearance();});
@@ -202,6 +233,6 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 window.addEventListener('pageshow',checkExpiry);
 createWheel('#tip-options',rates,'rate');
 createWheel('#people-options',Array.from({length:30},(_,i)=>i+1),'people',true);
-renderKeypad();applyAppearance();renderSettings();renderAmounts();scheduleExpiry();persist();
+renderKeypad();applyAppearance();renderSettings();renderAmounts();updateInstallHelp();scheduleExpiry();persist();
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});

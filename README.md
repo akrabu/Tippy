@@ -27,7 +27,11 @@ Open **http://localhost:8000**. Serve the folder through HTTP rather than openin
 
 ## Install
 
-On iPhone or iPad, open the app in Safari and choose **Share → Add to Home Screen**. In a supported desktop or Android browser, use the browser's install action or **Settings → Add to Home Screen** in Tippy.
+Open **Settings → Install Tippy** for the installation guide. In browser mode, the entry is near the top of Settings; once installed, **Installation help** is below Appearance. The guide opens only when requested and includes instructions for both platforms.
+
+- **iPhone or iPad:** open Tippy in Safari, choose **Share → Add to Home Screen**, keep **Open as Web App** on if offered, then tap **Add**.
+- **Android:** open Tippy in Chrome, choose **⋮ → Install and create shortcut** or **Add to Home screen**, then **Install**. A native **Install app** button appears in the guide when the browser supports it.
+- If you are viewing Tippy inside another app, open the page in Safari or Chrome first.
 
 Offline use is available once the app has loaded and cached its files. All calculations run in the browser; no backend, analytics, or external runtime assets are included.
 
@@ -48,15 +52,15 @@ The interface was recreated from reference screenshots. Behavior not visible in 
 With Node.js 18 or newer:
 
 ```sh
-node --test tests/calc.test.mjs
+node --test tests/*.test.mjs
 ```
 
-The tests cover cent precision, fractional rates, upward rounding, splitting, zero amounts, input limits, and automatic-clear timing.
+The tests cover cent precision, fractional rates, upward rounding, splitting, zero amounts, input limits, automatic-clear timing, platform detection, and accepted, dismissed, or unavailable native installation prompts.
 
 ## Files and hosting
 
 - `dist/` — complete static app, manifest, icons, and service worker.
-- `tests/` — calculation and input tests.
+- `tests/` — calculation, input, and installation-flow tests.
 - `scripts/make-icons.py` — dependency-free PWA icon generator; run with Python 3 to regenerate the PNG icons.
 
-Publish the contents of **`dist/`** to an HTTPS static host. Paths are relative so the app can run at a domain root or under a subdirectory. If you change cached app files, update the cache version in `dist/sw.js` when deploying.
+Publish the contents of **`dist/`** to an HTTPS static host. Paths are relative so the app can run at a domain root or under a subdirectory. If you change cached app files, update the cache version in `dist/sw.js` and keep the release query URLs in `dist/index.html` and the service worker asset list in sync when deploying.
