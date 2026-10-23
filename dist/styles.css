@@ -182,9 +182,9 @@ button.setting-row:active { background:#88888817; }
 @media(max-height:620px) { .calculator { --readout-height:280px; } .readout { grid-template-rows:minmax(44px,1fr) 88px 148px; } .app-footer { margin-top:8px; } }
 /* Keep both headers below iOS's native scroll-edge blur; retain the full background. */
 :root[data-ios-standalone="true"] {
-  /* WebKit can undercount the installed viewport with dynamic units. */
-  --app-viewport-height:100vh;
-  height:100vh;
+  /* Include an overlaid status area only when iOS reports its safe inset. */
+  --app-viewport-height:min(100vh,calc(100dvh + env(safe-area-inset-top,0px)));
+  height:var(--app-viewport-height);
   --ios-header-clearance:clamp(0px,calc(100dvh - 620px),32px);
   --app-inset-top:calc(env(safe-area-inset-top,0px) + var(--ios-header-clearance));
   --sheet-inset-top:calc(env(safe-area-inset-top,0px) + var(--ios-header-clearance));

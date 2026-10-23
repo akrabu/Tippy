@@ -37,17 +37,17 @@ Offline use is available once the app has loaded and cached its files. All calcu
 
 ## iPhone display
 
-The installed iOS app uses `100vh` for the page, calculator, and Settings sheet; browser tabs and Android retain dynamic viewport sizing. This follows the workaround in [WebKit's standalone viewport-height report](https://bugs.webkit.org/show_bug.cgi?id=254868), where dynamic measurements can exclude safe-area space. The existing up-to-32-pixel header clearance remains in place to avoid the native scroll-edge blur, tapering on very short viewports.
+The installed page, calculator, and Settings sheet use `min(100vh, calc(100dvh + env(safe-area-inset-top)))`. This includes the status area only when iOS reports its top safe inset, capped at the classic viewport height, so the page can fit both installed launch geometries. Browser tabs and Android retain dynamic viewport sizing. The existing up-to-32-pixel header clearance remains in place to avoid the native scroll-edge blur, tapering on very short viewports.
 
 The total and people wheel share the lower readout on opposite sides, leaving more height for the keypad. The footer reserves a 16-pixel gap below the keys (8 pixels on very short screens). The full-height background and roller clearances remain in place.
 
-The latest iPhone 13 mini measurements on iOS 27.0.1 report a 375 × 812 screen, a 375 × 762 dynamic viewport, and 50/34-pixel safe-area insets. A browser fixture reproduces the previous 53.5-pixel keys from those values; with the full 812-pixel canvas and revised readout, `v0.1.2-00004` produces 79-pixel keys while keeping the header at the same position. Full-height sizing still needs confirmation in the native Home Screen app.
+The iPhone 13 mini on iOS 27.0.1 has reported both 0/34 and 50/34-pixel safe-area insets with a 375 × 762 dynamic viewport. Revision `v0.1.2-00005` fits a 762-pixel page in the zero-top-inset case and includes the overlaid 50-pixel status area in the other case. Both browser fixtures produce 79-pixel keys and a fully visible footer. Tapping the version and opening or closing dialogs leave the page at scroll position zero. Confirmation in the native Home Screen app remains necessary.
 
 Tap the version number to open **Display check**, then **Copy details** to share layout measurements when troubleshooting. It includes all four viewport-unit heights, key size, and footer clearance. Details stay on the device unless you copy and share them; no diagnostics are transmitted automatically.
 
 ## Credits and testing revisions
 
-The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00004)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
+The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00005)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
 
 Before each subsequent publication, run:
 
