@@ -16,7 +16,7 @@
   --separator: #ffffff14;
   --glass: #24253780;
   --app-inset-top: max(env(safe-area-inset-top,0px),16px);
-  --app-inset-bottom: max(env(safe-area-inset-bottom,0px),20px);
+  --app-inset-bottom: max(8px,calc(env(safe-area-inset-bottom,0px) - 20px));
   --sheet-inset-top: max(env(safe-area-inset-top,0px),16px);
   color-scheme: dark;
   color: var(--foreground);
@@ -145,7 +145,8 @@ button.setting-row:active { background:#88888817; }
 .install-section { margin-bottom:20px; }
 .install-section:first-child { margin-bottom:26px; }
 .settings-footer { text-align:center; color:var(--secondary); font-size:12px; margin:24px 0 12px; }
-.app-footer { position:absolute; left:0; right:0; bottom:max(6px,calc(env(safe-area-inset-bottom,0px) - 14px)); text-align:center; color:var(--secondary); font-size:10px; line-height:12px; white-space:nowrap; }
+/* Reserve real space for the credit so the 0 key can never run into it. */
+.app-footer { flex:0 0 12px; margin-top:16px; text-align:center; color:var(--secondary); font-size:10px; line-height:12px; white-space:nowrap; }
 .app-footer a, .app-credit a { color:inherit; text-decoration:none; }
 @media(hover:hover) { .app-footer a:hover, .app-credit a:hover { text-decoration:underline; text-underline-offset:2px; } }
 .app-version { font:inherit; line-height:inherit; color:inherit; background:none; padding:0; border:0; }
@@ -176,10 +177,11 @@ button.setting-row:active { background:#88888817; }
 .display-check p { font-size:13px; margin-bottom:15px; }
 .display-check pre { font:12px/1.4 ui-monospace,monospace; white-space:pre-wrap; overflow-wrap:anywhere; margin:0 0 20px; }
 @media(min-width:650px) { .calculator { max-height:1000px; } .settings-sheet { max-height:1000px; } }
-@media(max-height:740px) { :root { --app-inset-top:max(env(safe-area-inset-top),8px); --app-inset-bottom:max(env(safe-area-inset-bottom),20px); } .calculator { --header-height:44px; --readout-height:288px; --key-gap:6px; } .readout { grid-template-rows:minmax(52px,1fr) 88px 64px 84px; } .keypad { height:calc(86.6cqw + 18px); min-height:194px; } .key { font-size:7cqw; } .amount { font-size:11.5cqw; } .tip-amount { font-size:14cqw; } .wheel { height:72px; } .wheel::before { top:20px; } .wheel-scroll { padding-block:21px; } .rounding-indicator,.each-indicator { font-size:9px; } }
+@media(max-height:740px) { :root { --app-inset-top:max(env(safe-area-inset-top),8px); } .calculator { --header-height:44px; --readout-height:288px; --key-gap:6px; } .readout { grid-template-rows:minmax(52px,1fr) 88px 64px 84px; } .keypad { height:calc(86.6cqw + 18px); min-height:194px; } .key { font-size:7cqw; } .amount { font-size:11.5cqw; } .tip-amount { font-size:14cqw; } .wheel { height:72px; } .wheel::before { top:20px; } .wheel-scroll { padding-block:21px; } .rounding-indicator,.each-indicator { font-size:9px; } }
+@media(max-height:620px) { .calculator { --readout-height:280px; } .readout { grid-template-rows:minmax(44px,1fr) 88px 64px 84px; } .app-footer { margin-top:8px; } }
 /* Keep both headers below iOS's native scroll-edge blur; retain the full background. */
 :root[data-ios-standalone="true"] {
-  --ios-header-clearance:clamp(0px,calc(100dvh - 620px),40px);
+  --ios-header-clearance:clamp(0px,calc(100dvh - 620px),32px);
   --app-inset-top:calc(env(safe-area-inset-top,0px) + var(--ios-header-clearance));
   --sheet-inset-top:calc(env(safe-area-inset-top,0px) + var(--ios-header-clearance));
 }

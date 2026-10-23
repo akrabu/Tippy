@@ -37,15 +37,15 @@ Offline use is available once the app has loaded and cached its files. All calcu
 
 ## iPhone display
 
-The calculator and Settings use dynamic viewport height with safe-area insets applied once. In the installed iOS app, up to 40 pixels of top clearance moves both headers below the native scroll-edge blur. The clearance tapers on very short viewports to keep the keypad usable. The full-height background, bottom credit, and reserved roller gaps remain in place. Browser tabs and Android retain their existing spacing.
+The calculator and Settings use dynamic viewport height with safe-area insets applied once. In the installed iOS app, up to 32 pixels of top clearance keeps both headers below the native scroll-edge blur. The clearance tapers on very short viewports to keep the keypad usable. Browser tabs and Android retain their existing top spacing. The bottom credit has its own layout space, with a 16-pixel gap below the keypad (8 pixels on very short screens), so it cannot crowd the 0 key. The full-height background and reserved roller gaps remain in place.
 
-The bottom-strip fix was confirmed on an iPhone 13 mini running iOS 27.0.1. An opaque status-bar request alone did not remove the blur, including after a fresh Home Screen installation. The added clearance has been checked against the phone's reported 375 × 762 viewport with a 34-pixel bottom safe area; the native blur still needs confirmation on that device.
+The bottom-strip fix and previous 40-pixel header clearance were confirmed on an iPhone 13 mini running iOS 27.0.1. Revision `v0.1.2-00003` moves the headers up 8 pixels and the footer down 6 pixels with the phone's reported 34-pixel bottom safe area, while preserving the keypad size at 375 × 762. Browser previews verify the spacing; the native iOS overlay cannot be reproduced there.
 
 Tap the version number to open **Display check**, then **Copy details** to share layout measurements when troubleshooting. The details stay on the device unless you choose to copy and share them; no diagnostics are transmitted automatically.
 
 ## Credits and testing revisions
 
-The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00002)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
+The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00003)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
 
 Before each subsequent publication, run:
 

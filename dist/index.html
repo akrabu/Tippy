@@ -10,12 +10,12 @@
   <meta name="apple-mobile-web-app-title" content="Tippy">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="color-scheme" content="dark light">
-  <meta name="application-version" content="0.1.2-00002">
+  <meta name="application-version" content="0.1.2-00003">
   <title>Tippy</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="./styles.css?v=0.1.2-00002">
+  <link rel="stylesheet" href="./styles.css?v=0.1.2-00003">
   <script>
     const root = document.documentElement;
     const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -28,7 +28,7 @@
     } catch {}
     document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content = root.dataset.appearance === 'light' ? 'default' : 'black';
   </script>
-  <script type="module" src="./app.mjs?v=0.1.2-00002"></script>
+  <script type="module" src="./app.mjs?v=0.1.2-00003"></script>
 </head>
 <body>
   <svg class="svg-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -62,7 +62,7 @@
     </section>
 
     <section id="keypad" class="keypad" aria-label="Enter bill amount"></section>
-    <footer class="app-footer">© 2026 <a href="https://www.markstevensmithjr.com" target="_blank" rel="noopener">Mark Steven Smith, Jr.</a> (<button type="button" class="app-version" data-display-check aria-label="Version 0.1.2-00002, display information">v0.1.2-00002</button>)</footer>
+    <footer class="app-footer">© 2026 <a href="https://www.markstevensmithjr.com" target="_blank" rel="noopener">Mark Steven Smith, Jr.</a> (<button type="button" class="app-version" data-display-check aria-label="Version 0.1.2-00003, display information">v0.1.2-00003</button>)</footer>
     <p id="announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
   </main>
 
@@ -79,7 +79,7 @@
       <section class="settings-section keyboard-section"><h3>Keyboard Layout</h3><div class="setting-group" id="layout-options" role="group" aria-label="Keyboard layout"></div></section>
       <section class="settings-section appearance-section"><h3>Appearance</h3><div class="setting-group" id="appearance-options" role="group" aria-label="Appearance"></div></section>
       <section id="install-section" class="settings-section install-section"><div class="setting-group"><button id="install-button" class="setting-row install-row" aria-haspopup="dialog"><span id="install-entry-label">Install Tippy</span><svg class="share-icon"><use href="#share-icon"/></svg></button></div><p id="install-caption" class="setting-description">Add Tippy to your Home Screen for quick access.</p></section>
-      <p class="settings-footer app-credit">© 2026 <a href="https://www.markstevensmithjr.com" target="_blank" rel="noopener">Mark Steven Smith, Jr.</a> (<button type="button" class="app-version" data-display-check aria-label="Version 0.1.2-00002, display information">v0.1.2-00002</button>)</p>
+      <p class="settings-footer app-credit">© 2026 <a href="https://www.markstevensmithjr.com" target="_blank" rel="noopener">Mark Steven Smith, Jr.</a> (<button type="button" class="app-version" data-display-check aria-label="Version 0.1.2-00003, display information">v0.1.2-00003</button>)</p>
     </div>
   </dialog>
 
