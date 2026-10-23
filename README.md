@@ -49,7 +49,7 @@ Tap the version number to open **Display check**, then **Copy details** to share
 
 ## Credits and testing revisions
 
-The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-00006)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
+The bottom credit reads **© 2026 Mark Steven Smith, Jr. (v0.1.2-007)**. The name links to [markstevensmithjr.com](https://www.markstevensmithjr.com), inherits the surrounding color, and is underlined only on hover.
 
 Before each subsequent publication, run:
 
@@ -57,7 +57,7 @@ Before each subsequent publication, run:
 node scripts/bump-version.mjs
 ```
 
-The helper increments the five-digit testing revision and updates the displayed version, metadata, stylesheet and module URLs, and service-worker cache together. For a feature release, change the three-part base version consistently in `dist/index.html` and `dist/sw.js` before running the helper.
+The helper increments the three-digit testing revision and updates the displayed version, metadata, stylesheet and module URLs, and service-worker cache together. Before the revision exceeds 999, increase the three-part base version and reset the revision consistently in `dist/index.html` and `dist/sw.js` before running the helper.
 
 ## Controls and calculations
 

@@ -7,9 +7,9 @@ const sources = await Promise.all(paths.map(path => readFile(path, 'utf8')));
 const version = sources[0].match(/<meta name="application-version" content="(\d+\.\d+\.\d+)-(\d+)">/);
 if (!version) throw new Error('Missing application version.');
 const revision = Number(version[2]) + 1;
-if (!Number.isSafeInteger(revision)) throw new Error('Testing revision is out of range.');
+if (!Number.isSafeInteger(revision) || revision > 999) throw new Error('Testing revision exceeds three digits. Increase the base version and reset the revision before publishing.');
 const current = `${version[1]}-${version[2]}`;
-const next = `${version[1]}-${String(revision).padStart(5, '0')}`;
+const next = `${version[1]}-${String(revision).padStart(3, '0')}`;
 for (const source of sources) {
   for (const file of ['styles.css', 'app.mjs']) {
     if (!source.includes(`${file}?v=${current}`)) throw new Error(`Release URL for ${file} is out of sync.`);
